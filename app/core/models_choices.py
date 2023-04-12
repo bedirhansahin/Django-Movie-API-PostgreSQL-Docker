@@ -1,5 +1,9 @@
 from datetime import datetime
 
+from django.utils.translation import gettext_lazy as _
+from django_countries import Countries
+
+
 # To select a gender
 GENDER_CHOICES = (
     ('M', 'MALE'),
@@ -11,4 +15,13 @@ GENDER_CHOICES = (
 # To select a year
 YEAR_CHOICES = []
 for i in range(1890, datetime.now().year+1):
-    YEAR_CHOICES.append(i)
+    YEAR_CHOICES.append((i, i))
+
+
+# To select a country
+class G8Countries(Countries):
+    only = [
+        "TR", "CA", "FR", "DE", "IT", "JP", "RU", "GB",
+        "US", "AT", "SE", "ES", "KR", "CN", "BE", "IR",
+
+    ]
