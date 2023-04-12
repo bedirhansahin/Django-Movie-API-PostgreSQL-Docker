@@ -1,11 +1,19 @@
 select * from core_user;
 truncate table core_user CASCADE;
 
-INSERT INTO core_user(password, is_superuser, username, first_name, last_name, email,
+INSERT INTO core_user(password, password2, is_superuser, username, first_name, last_name, email,
                       is_staff, is_active, birth_date, gender, date_joined)
 VALUES('pbkdf2_sha256$600000$OXxSi6imAMLJvrKLZ8wjoY$k28zjj0dn1MC0uUR67kYxbzA0IS0qWBiziWKE0Mvffg=',
+       'pbkdf2_sha256$600000$OXxSi6imAMLJvrKLZ8wjoY$k28zjj0dn1MC0uUR67kYxbzA0IS0qWBiziWKE0Mvffg=',
+       false, 'retro', 'retro', 'retro', 'retro@example.com',
+       false, true, '1997-06-12', 'E', CURRENT_TIMESTAMP);
+
+INSERT INTO core_user(password, password2, is_superuser, username, first_name, last_name, email,
+                      is_staff, is_active, birth_date, gender, date_joined)
+VALUES('pbkdf2_sha256$600000$OXxSi6imAMLJvrKLZ8wjoY$k28zjj0dn1MC0uUR67kYxbzA0IS0qWBiziWKE0Mvffg=',
+       'pbkdf2_sha256$600000$OXxSi6imAMLJvrKLZ8wjoY$k28zjj0dn1MC0uUR67kYxbzA0IS0qWBiziWKE0Mvffg=',
        true, 'admin', 'admin', 'admin', 'admin@admin.com',
-       true, true, '1992-11-01', 'M', CURRENT_TIMESTAMP);
+       true, true, '1997-06-12', 'F', CURRENT_TIMESTAMP);
 
 
 insert into core_genre (name, slug)
