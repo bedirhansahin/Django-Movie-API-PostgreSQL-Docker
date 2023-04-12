@@ -33,7 +33,7 @@ class MovieAdmin(admin.ModelAdmin):
 
 @admin.register(Director)
 class DirectorAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'slug']
     search_fields = ['name']
     search_help_text = "You can search by director name"
     prepopulated_fields = {'slug': ('name',)}

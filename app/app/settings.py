@@ -21,6 +21,9 @@ INSTALLED_APPS = [
     'core',
     'rest_framework',
     'django_countries',
+    'drf_spectacular',
+    'django_filters'
+
 ]
 
 MIDDLEWARE = [
@@ -87,8 +90,38 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/static/'
+MEDAI_URL = '/static/media/'
+
+MEDIA_ROOT = '/vol/web/media'
+STATIC_ROOT = '/vol/web/static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.User'
+
+REST_FRAMEWORK = {
+    # DATE and TIME format configures for rest_framework
+    'DATETIME_FORMAT': '%d/%m/%Y  %H:%M:%S',
+    'DATE_FORMAT': '%d/%m/%Y',
+    # SWAGGER DOC
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # for the PAGINATION
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
+    # for the PERMISSION
+    'DEFAULT_PERMISSION_CLASSES': 'rest_framework.permissions.AllowAny',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Movie API app',
+    'SERVER_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
+    'VERSION': '0.0.1'
+}
