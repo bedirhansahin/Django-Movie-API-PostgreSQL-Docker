@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, date, timedelta
+from django.core.exceptions import ValidationError
 
 from django.utils.translation import gettext_lazy as _
 from django_countries import Countries
@@ -19,9 +20,10 @@ for i in range(1890, datetime.now().year+1):
 
 
 # To select a country
-class G8Countries(Countries):
+class SomeCountries(Countries):
     only = [
         "TR", "CA", "FR", "DE", "IT", "JP", "RU", "GB",
         "US", "AT", "SE", "ES", "KR", "CN", "BE", "IR",
 
     ]
+

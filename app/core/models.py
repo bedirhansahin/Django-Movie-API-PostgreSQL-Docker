@@ -1,21 +1,19 @@
-from enum import unique
-
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 
-from django_countries import countries
 from django_countries.fields import CountryField
 
 from uuid import uuid4
+from datetime import date as date_now
 
 from .models_choices import *
 
 
 class User(AbstractUser):
-    birth_date = models.DateField(_("birth date"), null=True, blank=True)
+    birth_date = models.DateField(_("birth date"), null=True, blank=True,)
     gender = models.CharField(_("gender"), max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     REQUIRED_FIELDS = ["email"]
 
@@ -62,7 +60,7 @@ class Movie(models.Model):
     movie_name = models.CharField(_("movie name"), max_length=255)
     director = models.ForeignKey(Director, on_delete=models.CASCADE, verbose_name=_("director"))
     genre = models.ManyToManyField(Genre, verbose_name=_("category"))
-    country = CountryField(multiple=True, countries=G8Countries)
+    country = CountryField(multiple=True, countries=SomeCountries)
     production_year = models.PositiveIntegerField(_("production year"), choices=YEAR_CHOICES)
     duration = models.PositiveIntegerField(null=True, blank=True)
     imdb = models.DecimalField(
