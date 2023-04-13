@@ -15,7 +15,6 @@ from .models_choices import *
 
 
 class User(AbstractUser):
-    password2 = models.CharField(max_length=255)
     birth_date = models.DateField(_("birth date"), null=True, blank=True)
     gender = models.CharField(_("gender"), max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     REQUIRED_FIELDS = ["email"]

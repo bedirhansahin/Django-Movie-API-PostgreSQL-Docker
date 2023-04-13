@@ -8,6 +8,6 @@ from .views import (
 app_name = 'core'
 
 urlpatterns = [
-    path('user/list', UserListCreateAPIView.as_view(), name='user-list'),
+    path('users', UserListCreateAPIView.as_view(), name='user-list-create'),
     path('users/me', UserRetrieveAPIView.as_view(), name='user-me'),
 ]
