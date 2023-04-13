@@ -20,9 +20,6 @@ class UserSerializer(serializers.ModelSerializer):
     def validate(self, data):
         return data
 
-    def create(self, validated_data):
-        return get_user_model().objects.create_user(**validated_data)
-
 
 class UserDetailSerializer(serializers.ModelSerializer):
 
@@ -38,6 +35,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
         if len(value) < 6:
             raise serializers.ValidationError("Password must be at least 6 characters long.")
         return value
+
+    def create(self, validated_data):
+        return get_user_model().objects.create_user(**validated_data)
 
     def update(self, instance, validated_data):
         password = validated_data.pop('password', None)

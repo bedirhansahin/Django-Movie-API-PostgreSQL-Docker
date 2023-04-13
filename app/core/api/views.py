@@ -8,10 +8,15 @@ from . serializers import (
 )
 
 
-class UserListCreateAPIView(generics.ListCreateAPIView):
+class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all().order_by('id')
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class UserCreateAPIView(generics.CreateAPIView):
+    serializer_class = UserDetailSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 class UserRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
