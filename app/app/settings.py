@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # my extensions
     'core',
+    'movie',
     'rest_framework',
     'django_countries',
     'drf_spectacular',
