@@ -106,7 +106,7 @@ class DirectorView(
 class MovieListView(generics.ListAPIView):
     queryset = Movie.objects.all().order_by('movie_name')
     serializer_class = MovieSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.BasicAuthentication]
 
     # Filter and Search
@@ -116,15 +116,23 @@ class MovieListView(generics.ListAPIView):
     search_fields = ['movie_name']
 
 
-class MovieRetrieveView(generics.RetrieveAPIView):
+class MovieRetrieveView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MovieDetailSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
     authentication_classes = [authentication.BasicAuthentication]
     lookup_field = 'movie_id'
 
     def get_queryset(self):
         queryset = Movie.objects.filter(pk=self.kwargs['movie_id'])
         return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(
+            {'detail': 'Object Deleted Successfully'},
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 
 class MovieCreateView(generics.CreateAPIView):
@@ -142,6 +150,7 @@ class MovieCreateView(generics.CreateAPIView):
     )
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
+
 
 
 

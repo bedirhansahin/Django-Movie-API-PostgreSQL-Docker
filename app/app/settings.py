@@ -109,7 +109,7 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     # for the PAGINATION
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 25,
     # for the PERMISSION
     'DEFAULT_PERMISSION_CLASSES': 'rest_framework.permissions.AllowAny',
     'DEFAULT_AUTHENTICATION_CLASSES': (
