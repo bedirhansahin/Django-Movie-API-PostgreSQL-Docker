@@ -19,6 +19,7 @@ class UserAdmin(admin.ModelAdmin):
 
 class MovieInline(admin.TabularInline):
     model = Movie
+    extra = 0
 
 
 @admin.register(Movie)

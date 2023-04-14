@@ -20,6 +20,8 @@ from core.models import (
 from .serializers import (
     GenreSerializer,
     DirectorSerializer,
+    MovieSerializer,
+    MovieDetailSerializer,
 )
 
 
@@ -53,12 +55,7 @@ class GenreView(
         return super().create(request, *args, **kwargs)
 
 
-class DirectorView(
-    mixins.ListModelMixin,
-    mixins.CreateModelMixin,
-    mixins.DestroyModelMixin,
-    viewsets.GenericViewSet,
-):
+class DirectorView(viewsets.ModelViewSet):
     queryset = Director.objects.all().order_by('pk')
     serializer_class = DirectorSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -83,5 +80,21 @@ class DirectorView(
         return super().create(request, *args, **kwargs)
 
 
+class MovieListView(generics.ListAPIView):
+    queryset = Movie.objects.all().order_by('movie_name')
+    serializer_class = MovieSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = [authentication.BasicAuthentication]
+
+
+class MovieRetrieveView(generics.RetrieveAPIView):
+    serializer_class = MovieDetailSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = [authentication.BasicAuthentication]
+    lookup_field = 'movie_id'
+
+    def get_queryset(self):
+        queryset = Movie.objects.filter(pk=self.kwargs['movie_id'])
+        return queryset
 
 
