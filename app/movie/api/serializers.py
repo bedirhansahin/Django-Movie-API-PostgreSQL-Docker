@@ -2,7 +2,6 @@ from rest_framework import serializers
 from django_countries.serializers import CountryFieldMixin
 
 from core.models import Genre, Director, Movie
-from core.models_choices import SomeCountries
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -12,13 +11,22 @@ class GenreSerializer(serializers.ModelSerializer):
 
 
 class DirectorSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Director
         fields = ['id', 'name']
 
 
+# Director's Movies serializer for director retrieve pages
+class DirectorsMoviesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Movie
+        fields = ['movie_id', 'movie_name']
+
+
 class DirectorDetailSerializer(DirectorSerializer):
-    movies = Movie.objects.all()
+    movies = DirectorsMoviesSerializer(many=True)
 
     class Meta(DirectorSerializer.Meta):
         fields = DirectorSerializer.Meta.fields + ['movies']
