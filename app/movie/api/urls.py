@@ -4,8 +4,9 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 router.register(r'genres', views.GenreView, basename='genres')
+router.register(r'directors', views.DirectorView, basename='directors')
 
 app_name = 'movie'
 

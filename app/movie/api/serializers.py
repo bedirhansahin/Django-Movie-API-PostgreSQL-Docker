@@ -8,3 +8,10 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = ['id', 'name']
+
+
+class DirectorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Director
+        fields = ['id', 'name']
