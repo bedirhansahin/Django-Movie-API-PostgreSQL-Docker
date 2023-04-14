@@ -17,6 +17,13 @@ class DirectorSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
+class DirectorDetailSerializer(DirectorSerializer):
+    movies = Movie.objects.all()
+
+    class Meta(DirectorSerializer.Meta):
+        fields = DirectorSerializer.Meta.fields + ['movies']
+
+
 class MovieSerializer(
     CountryFieldMixin,
     serializers.ModelSerializer

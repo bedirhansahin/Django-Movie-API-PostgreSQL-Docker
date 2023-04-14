@@ -20,6 +20,7 @@ from core.models import (
 from .serializers import (
     GenreSerializer,
     DirectorSerializer,
+    DirectorDetailSerializer,
     MovieSerializer,
     MovieDetailSerializer,
 )
@@ -55,7 +56,13 @@ class GenreView(
         return super().create(request, *args, **kwargs)
 
 
-class DirectorView(viewsets.ModelViewSet):
+class DirectorView(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet
+):
     queryset = Director.objects.all().order_by('pk')
     serializer_class = DirectorSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -78,6 +85,12 @@ class DirectorView(viewsets.ModelViewSet):
         if not request.user.is_staff:
             raise PermissionDenied("You do not have permission to create new object")
         return super().create(request, *args, **kwargs)
+
+    def retrieve(self, request, pk, *args, **kwargs):
+        queryset = Director.objects.all()
+        director = get_object_or_404(queryset, pk=pk)
+        serializer = DirectorDetailSerializer(director)
+        return Response(serializer.data)
 
 
 class MovieListView(generics.ListAPIView):

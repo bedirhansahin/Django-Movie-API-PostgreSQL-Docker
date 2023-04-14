@@ -58,7 +58,12 @@ class Movie(models.Model):
         editable=False
     )
     movie_name = models.CharField(_("movie name"), max_length=255)
-    director = models.ForeignKey(Director, on_delete=models.CASCADE, verbose_name=_("director"))
+    director = models.ForeignKey(
+        Director,
+        on_delete=models.CASCADE,
+        verbose_name=_("director"),
+        related_name='movies'
+    )
     genre = models.ManyToManyField(Genre, verbose_name=_("category"))
     country = CountryField(multiple=True, countries=SomeCountries)
     production_year = models.PositiveIntegerField(_("production year"), choices=YEAR_CHOICES)
