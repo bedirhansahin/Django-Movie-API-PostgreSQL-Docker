@@ -4,16 +4,27 @@ from django_countries.serializers import CountryFieldMixin
 from core.models import Genre, Director, Movie
 
 
+# Genre's Movies serializer for director retrieve pages
+class GenresMoviesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Movie
+        fields = ['movie_id', 'movie_name']
+
+
 class GenreSerializer(serializers.ModelSerializer):
+    movies = GenresMoviesSerializer(many=True)
+
     class Meta:
         model = Genre
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'movies']
+        read_only_fields = ['movies']
 
 
-class DirectorSerializer(serializers.ModelSerializer):
+class GenreCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Director
+        model = Genre
         fields = ['id', 'name']
 
 
@@ -25,11 +36,19 @@ class DirectorsMoviesSerializer(serializers.ModelSerializer):
         fields = ['movie_id', 'movie_name']
 
 
+class DirectorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Director
+        fields = ['id', 'name']
+
+
 class DirectorDetailSerializer(DirectorSerializer):
     movies = DirectorsMoviesSerializer(many=True)
 
     class Meta(DirectorSerializer.Meta):
         fields = DirectorSerializer.Meta.fields + ['movies']
+        read_only_fields = ['movies']
 
 
 class MovieSerializer(

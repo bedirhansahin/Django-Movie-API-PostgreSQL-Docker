@@ -64,7 +64,7 @@ class Movie(models.Model):
         verbose_name=_("director"),
         related_name='movies'
     )
-    genre = models.ManyToManyField(Genre, verbose_name=_("category"))
+    genre = models.ManyToManyField(Genre, verbose_name=_("genre"), related_name='movies')
     country = CountryField(multiple=True, countries=SomeCountries)
     production_year = models.PositiveIntegerField(_("production year"), choices=YEAR_CHOICES)
     duration = models.PositiveIntegerField(null=True, blank=True)

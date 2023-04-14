@@ -50,3 +50,4 @@ class GenreAdmin(admin.ModelAdmin):
     search_help_text = "You can search by director name"
     prepopulated_fields = {'slug': ('name',)}
     ordering = ['name']
+
