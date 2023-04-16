@@ -119,7 +119,7 @@ class MovieListView(generics.ListAPIView):
 class MovieRetrieveView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MovieDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.TokenAuthentication]
+    authentication_classes = [authentication.TokenAuthentication, authentication.BasicAuthentication]
     lookup_field = 'movie_id'
 
     def get_queryset(self):
@@ -127,17 +127,24 @@ class MovieRetrieveView(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
     def get_authenticators(self):
-        if self.request.method == 'GET':
+        if self.request and self.request.method == 'GET' and 'movie_id' in self.kwargs:
             return [authentication.BasicAuthentication()]
-        return super().get_authenticators()
+        return [authentication.TokenAuthentication()]
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
+        if not request.user.is_staff:
+            raise PermissionDenied("You do not have permission to delete this object")
         self.perform_destroy(instance)
         return Response(
             {'detail': 'Object Deleted Successfully'},
             status=status.HTTP_204_NO_CONTENT
         )
+
+    def update(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise PermissionDenied("You do not have permission to create new object")
+        return super().update(request, *args, **kwargs)
 
 
 class MovieCreateView(generics.CreateAPIView):
