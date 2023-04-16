@@ -1,3 +1,5 @@
+from enum import unique
+
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -80,3 +82,18 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.movie_name
+
+
+class CommentAndScore(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    comment = models.TextField(_("comment"))
+    score = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+
+    class Meta:
+        unique_together = ('movie', 'user')
+        verbose_name = 'Comment and Score'
+        verbose_name_plural = 'Comments and Scores'
+
+    def __str__(self):
+        return self.comment

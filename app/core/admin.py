@@ -22,6 +22,15 @@ class MovieInline(admin.TabularInline):
     extra = 0
 
 
+class CommendAndScoreInline(admin.TabularInline):
+    model = CommentAndScore
+    extra = 0
+
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        super().save_model(request, obj, form, change)
+
+
 @admin.register(Movie)
 class MovieAdmin(admin.ModelAdmin):
     list_display = ['movie_id', 'movie_name', 'director', 'imdb']
@@ -30,6 +39,8 @@ class MovieAdmin(admin.ModelAdmin):
     list_filter = ['director', 'genre', 'country']
     list_per_page = 10
     readonly_fields = ['movie_id']
+
+    inlines = [CommendAndScoreInline]
 
 
 @admin.register(Director)
@@ -50,4 +61,25 @@ class GenreAdmin(admin.ModelAdmin):
     search_help_text = "You can search by director name"
     prepopulated_fields = {'slug': ('name',)}
     ordering = ['name']
+
+
+@admin.register(CommentAndScore)
+class CommentAndScoreAdmin(admin.ModelAdmin):
+    list_display = ['user', 'movie', 'comment', 'score']
+    exclude = ('user',)
+    search_fields = ['user', 'movie']
+    ordering = ['movie', 'score']
+    search_help_text = "You can search by movie name and user"
+    list_filter = ['movie']
+
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        obj.save()
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['movie'].queryset = Movie.objects.all()
+        return form
+
+
 
