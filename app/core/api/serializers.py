@@ -1,5 +1,4 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 
 from ..models import Movie, Director, Genre
@@ -54,4 +53,25 @@ class UserDetailSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class AuthTokenSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=50)
+    password = serializers.CharField(max_length=100, style={'input_type': 'password'})
+
+    def validate(self, attrs):
+        username = attrs.get('username')
+        password = attrs.get('password')
+        user = authenticate(
+            request=self.context.get('request'),
+            username=username,
+            password=password
+        )
+        if not user:
+            message = _('Authentication failed')
+            raise serializers.ValidationError(message, code='authorization')
+
+        attrs['user'] = user
+        return attrs
+
 

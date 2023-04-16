@@ -14,10 +14,10 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     # API
     path('api/', include('movie.api.urls')),
-    path('api/user/', include('core.api.urls')),
+    path('api/', include('core.api.urls')),
     # Swagger Documentation
-    path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='api-schema'), name='api-docs'),
+    path('api/schema', SpectacularAPIView.as_view(), name='api-schema'),
+    path('api/docs', SpectacularSwaggerView.as_view(url_name='api-schema'), name='api-docs'),
 ]
 
 if settings.DEBUG:

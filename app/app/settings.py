@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'core',
     'movie',
     'rest_framework',
+    'rest_framework.authtoken',
     'django_countries',
     'drf_spectacular',
     'django_filters'

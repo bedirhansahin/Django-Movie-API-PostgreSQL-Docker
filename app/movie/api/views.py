@@ -40,7 +40,7 @@ class GenreView(
     queryset = Genre.objects.all().order_by('pk')
     serializer_class = GenreSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.BasicAuthentication, authentication.TokenAuthentication]
     filter_backends = [django_filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     ordering_fields = ['name']
     search_fields = ['name']
@@ -76,7 +76,7 @@ class DirectorView(
     queryset = Director.objects.all().order_by('pk')
     serializer_class = DirectorSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.BasicAuthentication, authentication.TokenAuthentication]
     filter_backends = [django_filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     ordering_fields = ['name']
     search_fields = ['name']
@@ -107,7 +107,7 @@ class MovieListView(generics.ListAPIView):
     queryset = Movie.objects.all().order_by('movie_name')
     serializer_class = MovieSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.BasicAuthentication, authentication.TokenAuthentication]
 
     # Filter and Search
     filter_backends = [django_filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
@@ -118,13 +118,18 @@ class MovieListView(generics.ListAPIView):
 
 class MovieRetrieveView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MovieDetailSerializer
-    permission_classes = [permissions.IsAdminUser]
-    authentication_classes = [authentication.BasicAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
     lookup_field = 'movie_id'
 
     def get_queryset(self):
         queryset = Movie.objects.filter(pk=self.kwargs['movie_id'])
         return queryset
+
+    def get_authenticators(self):
+        if self.request.method == 'GET':
+            return [authentication.BasicAuthentication()]
+        return super().get_authenticators()
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -138,14 +143,12 @@ class MovieRetrieveView(generics.RetrieveUpdateDestroyAPIView):
 class MovieCreateView(generics.CreateAPIView):
     serializer_class = MovieDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.TokenAuthentication]
 
     @extend_schema(
         description='To  Select Country, You can Use General Country Code',
         responses={
             '201': MovieDetailSerializer,
-            '400': 'Bad Request',
-            '401': 'Unauthorized',
         }
     )
     def post(self, request, *args, **kwargs):
