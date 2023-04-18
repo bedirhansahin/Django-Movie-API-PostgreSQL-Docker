@@ -1,5 +1,3 @@
-from enum import unique
-
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -9,7 +7,6 @@ from django.utils.text import slugify
 from django_countries.fields import CountryField
 
 from uuid import uuid4
-from datetime import date as date_now
 
 from .models_choices import *
 
@@ -85,15 +82,17 @@ class Movie(models.Model):
 
 
 class CommentAndScore(models.Model):
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comments')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comment_score')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_score')
     comment = models.TextField(_("comment"))
     score = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    created_at = models.DateTimeField(_("created_at"), auto_now=True)
 
     class Meta:
-        unique_together = ('movie', 'user')
+        unique_together = ('movie', 'owner')
         verbose_name = 'Comment and Score'
         verbose_name_plural = 'Comments and Scores'
 
     def __str__(self):
         return self.comment
+

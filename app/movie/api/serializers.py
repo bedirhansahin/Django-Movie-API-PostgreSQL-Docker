@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from django_countries.serializers import CountryFieldMixin
 
-from core.models import Genre, Director, Movie
+from core.models import Genre, Director, Movie, CommentAndScore
+from core.api.serializers import UserForCommentSerializer
 
 
 # Genre's Movies serializer for director retrieve pages
-class GenresMoviesSerializer(serializers.ModelSerializer):
+class MoviesForCommentAndGenresSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
@@ -13,7 +14,7 @@ class GenresMoviesSerializer(serializers.ModelSerializer):
 
 
 class GenreSerializer(serializers.ModelSerializer):
-    movies = GenresMoviesSerializer(many=True)
+    movies = MoviesForCommentAndGenresSerializer(many=True)
 
     class Meta:
         model = Genre
@@ -66,3 +67,20 @@ class MovieDetailSerializer(MovieSerializer):
 
     class Meta(MovieSerializer.Meta):
         fields = MovieSerializer.Meta.fields + ['story_line']
+
+
+class CommentAndScoreSerializer(serializers.ModelSerializer):
+    owner = UserForCommentSerializer(read_only=True)
+    movie = MoviesForCommentAndGenresSerializer(read_only=True)
+
+    class Meta:
+        model = CommentAndScore
+        fields = '__all__'
+
+
+class CommentAndScoreForUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CommentAndScore
+        fields = ['id', 'comment']
+

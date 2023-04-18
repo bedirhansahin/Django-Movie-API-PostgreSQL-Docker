@@ -26,7 +26,7 @@ class UserCreateAPIView(generics.CreateAPIView):
 class UserRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.TokenAuthentication]
+    authentication_classes = [authentication.BasicAuthentication]
 
     def get_object(self):
         return self.request.user

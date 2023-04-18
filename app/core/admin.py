@@ -6,6 +6,11 @@ from . models import *
 admin.site.site_header = 'Movie API Admin Page'
 
 
+class CommentAndScoreInline(admin.TabularInline):
+    model = CommentAndScore
+    extra = 0
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'first_name', 'last_name', 'gender', 'birth_date', 'is_active']
@@ -16,10 +21,16 @@ class UserAdmin(admin.ModelAdmin):
     ordering = ['date_joined']
     readonly_fields = ['username', 'email']
 
+    inlines = [CommentAndScoreInline]
+
 
 class MovieInline(admin.TabularInline):
     model = Movie
     extra = 0
+
+    def save_model(self, request, obj, form, change):
+        obj.user = request.user
+        super().save_model(request, obj, form, change)
 
 
 class CommendAndScoreInline(admin.TabularInline):
@@ -65,9 +76,9 @@ class GenreAdmin(admin.ModelAdmin):
 
 @admin.register(CommentAndScore)
 class CommentAndScoreAdmin(admin.ModelAdmin):
-    list_display = ['user', 'movie', 'comment', 'score']
-    exclude = ('user',)
-    search_fields = ['user', 'movie']
+    list_display = ['owner', 'movie', 'comment', 'score']
+    exclude = ('owner',)
+    search_fields = ['owner', 'movie']
     ordering = ['movie', 'score']
     search_help_text = "You can search by movie name and user"
     list_filter = ['movie']

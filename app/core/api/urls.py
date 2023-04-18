@@ -10,8 +10,8 @@ from .views import (
 app_name = 'core'
 
 urlpatterns = [
-    path('users/list', UserListAPIView.as_view(), name='user-list'),
-    path('users/create', UserCreateAPIView.as_view(), name='user-create'),
-    path('users/me', UserRetrieveAPIView.as_view(), name='user-me'),
+    path('user/list', UserListAPIView.as_view(), name='user-list'),
+    path('user/create', UserCreateAPIView.as_view(), name='user-create'),
+    path('user/me', UserRetrieveAPIView.as_view(), name='user-me'),
     path('token', CreateTokenAPIView.as_view(), name='token'),
 ]

@@ -1,8 +1,6 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 
-from ..models import Movie, Director, Genre
-
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -55,6 +53,13 @@ class UserDetailSerializer(serializers.ModelSerializer):
         return instance
 
 
+class UserForCommentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'username', 'email']
+
+
 class AuthTokenSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=50)
     password = serializers.CharField(max_length=100, style={'input_type': 'password'})
@@ -68,7 +73,7 @@ class AuthTokenSerializer(serializers.Serializer):
             password=password
         )
         if not user:
-            message = _('Authentication failed')
+            message = 'Authentication failed'
             raise serializers.ValidationError(message, code='authorization')
 
         attrs['user'] = user

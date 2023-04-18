@@ -19,7 +19,9 @@ from drf_spectacular.utils import (
 from core.models import (
     Genre,
     Director,
-    Movie)
+    Movie,
+    CommentAndScore
+    )
 from .serializers import (
     GenreSerializer,
     GenreCreateSerializer,
@@ -27,6 +29,7 @@ from .serializers import (
     DirectorDetailSerializer,
     MovieSerializer,
     MovieDetailSerializer,
+    CommentAndScoreSerializer,
 )
 
 
@@ -162,7 +165,14 @@ class MovieCreateView(generics.CreateAPIView):
         return super().post(request, *args, **kwargs)
 
 
+class CommentAndScoreListAPIView(generics.ListAPIView):
+    queryset = CommentAndScore.objects.all()
+    serializer_class = CommentAndScoreSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.BasicAuthentication]
 
-
-
-
+    # Filter and Search
+    filter_backends = [django_filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['owner', 'movie']
+    ordering_fields = ['movie', 'score']
+    search_fields = ['movie__movie_name']
