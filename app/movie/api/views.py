@@ -29,7 +29,7 @@ from .serializers import (
     DirectorDetailSerializer,
     MovieSerializer,
     MovieDetailSerializer,
-    CommentAndScoreSerializer,
+    CommentAndScoreListSerializer,
 )
 
 
@@ -167,7 +167,7 @@ class MovieCreateView(generics.CreateAPIView):
 
 class CommentAndScoreListAPIView(generics.ListAPIView):
     queryset = CommentAndScore.objects.all()
-    serializer_class = CommentAndScoreSerializer
+    serializer_class = CommentAndScoreListSerializer
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [authentication.BasicAuthentication]
 

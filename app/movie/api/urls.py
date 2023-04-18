@@ -13,8 +13,8 @@ app_name = 'movie'
 urlpatterns = router.urls
 
 urlpatterns += [
-    path('movie/list', views.MovieListView.as_view(), name='movie-list'),
-    path('movie/<uuid:movie_id>', views.MovieRetrieveView.as_view(), name='movie-detail'),
-    path('movie/create', views.MovieCreateView.as_view(), name='movie-create'),
-    path('comment/list', views.CommentAndScoreListAPIView.as_view(), name='comment-list'),
+    path('movies', views.MovieListView.as_view(), name='movie-list'),
+    path('movies/<uuid:movie_id>', views.MovieRetrieveView.as_view(), name='movie-detail'),
+    path('movies/create', views.MovieCreateView.as_view(), name='movie-create'),
+    path('comments', views.CommentAndScoreListAPIView.as_view(), name='comment-list'),
 ]

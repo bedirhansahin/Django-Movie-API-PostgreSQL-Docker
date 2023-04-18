@@ -70,7 +70,7 @@ class MovieDetailSerializer(MovieSerializer):
         fields = MovieSerializer.Meta.fields + ['story_line']
 
 
-class CommentAndScoreSerializer(serializers.ModelSerializer):
+class CommentAndScoreListSerializer(serializers.ModelSerializer):
     owner = UserForCommentSerializer(read_only=True)
     movie = MoviesForCommentAndGenresSerializer(read_only=True)
 
