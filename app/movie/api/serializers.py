@@ -64,6 +64,7 @@ class MovieSerializer(
 
 
 class MovieDetailSerializer(MovieSerializer):
+    director = DirectorSerializer()
 
     class Meta(MovieSerializer.Meta):
         fields = MovieSerializer.Meta.fields + ['story_line']
