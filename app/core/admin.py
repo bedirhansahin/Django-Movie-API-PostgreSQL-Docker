@@ -38,7 +38,7 @@ class CommendAndScoreInline(admin.TabularInline):
     extra = 0
 
     def save_model(self, request, obj, form, change):
-        obj.user = request.user
+        obj.owner = request.user
         super().save_model(request, obj, form, change)
 
 
@@ -84,7 +84,7 @@ class CommentAndScoreAdmin(admin.ModelAdmin):
     list_filter = ['movie']
 
     def save_model(self, request, obj, form, change):
-        obj.user = request.user
+        obj.owner = request.user
         obj.save()
 
     def get_form(self, request, obj=None, **kwargs):

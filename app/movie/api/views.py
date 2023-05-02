@@ -30,6 +30,8 @@ from .serializers import (
     MovieSerializer,
     MovieDetailSerializer,
     CommentAndScoreListSerializer,
+    CommentAndScoreCreateSerializer,
+    CommentAndScoreRetrieveSerializer,
 )
 
 
@@ -156,7 +158,7 @@ class MovieCreateView(generics.CreateAPIView):
     authentication_classes = [authentication.TokenAuthentication]
 
     @extend_schema(
-        description='To  Select Country, You can Use General Country Code',
+        description='To Select Country, You can Use General Country Code',
         responses={
             '201': MovieDetailSerializer,
         }
@@ -176,3 +178,45 @@ class CommentAndScoreListAPIView(generics.ListAPIView):
     filterset_fields = ['owner', 'movie']
     ordering_fields = ['movie', 'score']
     search_fields = ['movie__movie_name']
+
+
+class CommentAndScoreCreateAPIView(generics.CreateAPIView):
+    serializer_class = CommentAndScoreCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.BasicAuthentication]
+
+
+class CommentAndScoreRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = CommentAndScoreRetrieveSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.BasicAuthentication]
+
+    def get_queryset(self):
+        queryset = CommentAndScore.objects.filter(pk=self.kwargs['pk'])
+        comment = get_object_or_404(queryset)
+
+        if comment.owner == self.request.user:
+            return queryset.filter(owner=self.request.user)
+
+        raise PermissionDenied("You are not allowed to view this comment.")
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, pk=self.kwargs['pk'])
+        return obj
+
+    def perform_update(self, serializer):
+        comment = self.get_object()
+
+        if comment.owner == self.request.user:
+            serializer.save()
+
+        raise PermissionDenied("You are not allowed to update this comment.")
+
+    def perform_destroy(self, instance):
+        comment = self.get_object()
+
+        if comment.owner == self.request.user:
+            instance.delete()
+
+        raise PermissionDenied("You are not allowed to update this comment.")

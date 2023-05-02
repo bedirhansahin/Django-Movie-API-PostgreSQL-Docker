@@ -5,7 +5,7 @@ INSERT INTO core_user(password, is_superuser, username, first_name, last_name, e
                       is_staff, is_active, birth_date, gender, date_joined)
 VALUES('pbkdf2_sha256$600000$OXxSi6imAMLJvrKLZ8wjoY$k28zjj0dn1MC0uUR67kYxbzA0IS0qWBiziWKE0Mvffg=',
        false, 'retro', 'retro', 'retro', 'retro@example.com',
-       false, true, '1997-06-12', 'E', CURRENT_TIMESTAMP);
+       false, true, '1997-06-12', 'M', CURRENT_TIMESTAMP);
 
 INSERT INTO core_user(password, is_superuser, username, first_name, last_name, email,
                       is_staff, is_active, birth_date, gender, date_joined)

@@ -1,3 +1,4 @@
+from django.template.defaulttags import comment
 from rest_framework import serializers
 from django_countries.serializers import CountryFieldMixin
 
@@ -79,9 +80,26 @@ class CommentAndScoreListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CommentAndScoreForUserSerializer(serializers.ModelSerializer):
+class CommentAndScoreCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommentAndScore
-        fields = ['id', 'comment']
+        fields = ['movie', 'comment', 'score']
 
+    def save(self, *args, **kwargs):
+        owner = self.context['request'].user
+        comments = CommentAndScore(
+            owner=owner,
+            movie=self.validated_data['movie'],
+            comment=self.validated_data['comment'],
+            score=self.validated_data['score']
+        )
+        comments.save()
+        return comments
+
+
+class CommentAndScoreRetrieveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CommentAndScore
+        fields = ['id', 'comment', 'score']
