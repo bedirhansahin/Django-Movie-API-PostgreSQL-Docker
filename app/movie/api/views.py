@@ -171,7 +171,7 @@ class CommentAndScoreListAPIView(generics.ListAPIView):
     queryset = CommentAndScore.objects.all()
     serializer_class = CommentAndScoreListSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.BasicAuthentication, authentication.TokenAuthentication]
 
     # Filter and Search
     filter_backends = [django_filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
@@ -183,13 +183,13 @@ class CommentAndScoreListAPIView(generics.ListAPIView):
 class CommentAndScoreCreateAPIView(generics.CreateAPIView):
     serializer_class = CommentAndScoreCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.BasicAuthentication, authentication.TokenAuthentication]
 
 
 class CommentAndScoreRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentAndScoreRetrieveSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.BasicAuthentication, authentication.TokenAuthentication]
 
     def get_queryset(self):
         queryset = CommentAndScore.objects.filter(pk=self.kwargs['pk'])
@@ -222,7 +222,7 @@ class CommentAndScoreRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
 class MyCommentAndScoreAPIView(generics.ListAPIView):
     serializer_class = CommentAndScoreRetrieveSerializer
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [authentication.BasicAuthentication]
+    authentication_classes = [authentication.BasicAuthentication, authentication.TokenAuthentication]
 
     filter_backends = [django_filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
     filterset_fields = ['movie']
