@@ -18,5 +18,6 @@ urlpatterns += [
     path('movies/create', views.MovieCreateView.as_view(), name='movie-create'),
     path('comments', views.CommentAndScoreListAPIView.as_view(), name='comment-list'),
     path('comments/create', views.CommentAndScoreCreateAPIView.as_view(), name='comment-create'),
+    path("comments/mine", views.MyCommentAndScoreAPIView.as_view(), name='comment-mine'),
     path('comments/<int:pk>', views.CommentAndScoreRetrieveAPIView.as_view(), name='comment-detail'),
 ]

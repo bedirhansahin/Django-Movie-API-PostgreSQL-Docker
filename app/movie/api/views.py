@@ -195,10 +195,7 @@ class CommentAndScoreRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
         queryset = CommentAndScore.objects.filter(pk=self.kwargs['pk'])
         comment = get_object_or_404(queryset)
 
-        if comment.owner == self.request.user:
-            return queryset.filter(owner=self.request.user)
-
-        raise PermissionDenied("You are not allowed to view this comment.")
+        return queryset
 
     def get_object(self):
         queryset = self.get_queryset()
@@ -219,4 +216,19 @@ class CommentAndScoreRetrieveAPIView(generics.RetrieveUpdateDestroyAPIView):
         if comment.owner == self.request.user:
             instance.delete()
 
-        raise PermissionDenied("You are not allowed to update this comment.")
+        raise PermissionDenied("You are not allowed to delete this comment.")
+
+
+class MyCommentAndScoreAPIView(generics.ListAPIView):
+    serializer_class = CommentAndScoreRetrieveSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.BasicAuthentication]
+
+    filter_backends = [django_filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter]
+    filterset_fields = ['movie']
+    ordering_fields = ['movie', 'score']
+    search_fields = ['movie__movie_name', 'comment']
+
+    def get_queryset(self):
+        owner = self.request.user
+        return CommentAndScore.objects.filter(owner=owner)

@@ -99,7 +99,8 @@ class CommentAndScoreCreateSerializer(serializers.ModelSerializer):
 
 
 class CommentAndScoreRetrieveSerializer(serializers.ModelSerializer):
+    movie = MoviesForCommentAndGenresSerializer(read_only=True)
 
     class Meta:
         model = CommentAndScore
-        fields = ['id', 'comment', 'score']
+        fields = ['id', 'movie', 'comment', 'score']

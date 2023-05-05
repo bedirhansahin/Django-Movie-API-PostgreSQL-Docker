@@ -85,7 +85,14 @@ class CommentAndScore(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comment_score')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_score')
     comment = models.TextField(_("comment"))
-    score = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    score = models.DecimalField(
+        max_digits=3,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(10)
+        ]
+    )
     created_at = models.DateTimeField(_("created_at"), auto_now=True)
 
     class Meta:
